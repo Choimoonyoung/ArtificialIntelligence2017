@@ -8,20 +8,20 @@ using namespace std;
 int nodeCount;
 
 
-int board[6][8]; //½×À»¶§ ´ë½Å À§¿¡¼­ºÎÅÍ ½×´Â´Ù.
+int board[6][8]; //ìŒ“ì„ë•Œ ëŒ€ì‹  ìœ„ì—ì„œë¶€í„° ìŒ“ëŠ”ë‹¤.
 int height[8];
 int totalmove;
 int columnarr[8];
 
 int omega = 0, opp = 0;
 
-void play(int col) { //ÇÏ³ª¸¦ µÎ¾úÀ» ¶§
+void play(int col) { //í•˜ë‚˜ë¥¼ ë‘ì—ˆì„ ë•Œ
 	height[col]++;
-	board[height[col] - 1][col] = totalmove % 2 + 1; //È¦¼ö¹øÂ°1 Â¦¼ö¹øÂ°2
+	board[height[col] - 1][col] = totalmove % 2 + 1; //í™€ìˆ˜ë²ˆì§¸1 ì§ìˆ˜ë²ˆì§¸2
 	totalmove++;
 }
 
-void cancelplay(int col) { //µĞ °Í Ãë¼Ò
+void cancelplay(int col) { //ë‘” ê²ƒ ì·¨ì†Œ
 	height[col]--;
 	board[height[col]][col] = 0;
 	totalmove--;
@@ -32,17 +32,17 @@ bool isfullcolumn(int column) {
 	if (board[5][column] != 0)
 		return true;
 	else return false;
-	//columnÀÌ ²ËÃ¡À¸¸é true ¾Æ´Ï¸é false 
+	//columnì´ ê½‰ì°¼ìœ¼ë©´ true ì•„ë‹ˆë©´ false 
 }
 
-bool isthiswinningmove(int col) {//Áö±İ column¿¡ µÎ¸é ÇöÀç ÁøÇàÀÚ°¡ ÀÌ±â³ª¿ä?
+bool isthiswinningmove(int col) {//ì§€ê¸ˆ columnì— ë‘ë©´ í˜„ì¬ ì§„í–‰ìê°€ ì´ê¸°ë‚˜ìš”?
 	int player = totalmove % 2 + 1;
 	if (height[col] >= 3 && board[height[col] - 1][col] == player && board[height[col] - 2][col] == player && board[height[col] - 3][col] == player) {
 		return true;
 	}//vertical check
-	int cx = height[col]; //ÇöÀç Âø¼öÁ¡
+	int cx = height[col]; //í˜„ì¬ ì°©ìˆ˜ì 
 	int cy = col;
-	for (int dy = -1; dy <= 1; dy++) { //y¹æÇâ dir. dy == -1 || 1 ÀÌ¸é diagonal, 0ÀÌ¸é horizontal check
+	for (int dy = -1; dy <= 1; dy++) { //yë°©í–¥ dir. dy == -1 || 1 ì´ë©´ diagonal, 0ì´ë©´ horizontal check
 		int nb = 0;
 		for (int dx = -1; dx <= 1; dx += 2) {
 			for (int x = cx + dx, y = cy + dx*dy; x >= 1 && x <= 7 && y <= 5 && y >= 0 && board[x][y] == player; nb++) {
@@ -55,14 +55,14 @@ bool isthiswinningmove(int col) {//Áö±İ column¿¡ µÎ¸é ÇöÀç ÁøÇàÀÚ°¡ ÀÌ±â³ª¿ä?
 	return false;
 }
 
-bool isthislosingmove(int col) { //Áö±İ column¿¡ µÎ¸é ÇöÀçÁøÇàÀÚ°¡ Áö³ª¿ä?
+bool isthislosingmove(int col) { //ì§€ê¸ˆ columnì— ë‘ë©´ í˜„ì¬ì§„í–‰ìê°€ ì§€ë‚˜ìš”?
 	int player = 3 - totalmove % 2 + 1;
 	if (height[col] >= 3 && board[height[col] - 1][col] == player && board[height[col] - 2][col] == player && board[height[col] - 3][col] == player) {
 		return true;
 	}//vertical check
-	int cx = height[col]; //ÇöÀç Âø¼öÁ¡
+	int cx = height[col]; //í˜„ì¬ ì°©ìˆ˜ì 
 	int cy = col;
-	for (int dy = -1; dy <= 1; dy++) { //y¹æÇâ dir. dy == -1 || 1 ÀÌ¸é diagonal, 0ÀÌ¸é horizontal check
+	for (int dy = -1; dy <= 1; dy++) { //yë°©í–¥ dir. dy == -1 || 1 ì´ë©´ diagonal, 0ì´ë©´ horizontal check
 		int nb = 0;
 		for (int dx = -1; dx <= 1; dx += 2) {
 			for (int x = cx + dx, y = cy + dx*dy; x >= 1 && x <= 7 && y <= 5 && y >= 0 && board[x][y] == player; nb++) {
@@ -74,7 +74,7 @@ bool isthislosingmove(int col) { //Áö±İ column¿¡ µÎ¸é ÇöÀçÁøÇàÀÚ°¡ Áö³ª¿ä?
 	}
 	return false;
 }
-int playsequence(string positionlist) { //¿©·¯°¡Áö¸¦ µÎ¾úÀ» ¶§
+int playsequence(string positionlist) { //ì—¬ëŸ¬ê°€ì§€ë¥¼ ë‘ì—ˆì„ ë•Œ
 	for (int i = 0; i < positionlist.size(); i++) {
 		int col = positionlist[i];
 		if ((col > 7) || (col < 1) || isfullcolumn(col) || isthiswinningmove(col))
@@ -84,13 +84,13 @@ int playsequence(string positionlist) { //¿©·¯°¡Áö¸¦ µÎ¾úÀ» ¶§
 	return positionlist.size();
 }
 
-bool checkhorizontal() { //4°³°¡ ÀÌ·ç¾îÁö´Â°Ô ÀÖ³ª Ã£¾Æº»´Ù.
+bool checkhorizontal() { //4ê°œê°€ ì´ë£¨ì–´ì§€ëŠ”ê²Œ ìˆë‚˜ ì°¾ì•„ë³¸ë‹¤.
 	for (int i = 0; i < 6; i++) {
 		for (int j = 1; j <= 4; j++) {
-			if (board[i][j] != 0) { //Âø¼ö°¡ µÇ¾îÀÖ´Ù¸é
+			if (board[i][j] != 0) { //ì°©ìˆ˜ê°€ ë˜ì–´ìˆë‹¤ë©´
 				int stoneowner = board[i][j];
 				if ((board[i][j + 1] == stoneowner) && (board[i][j + 2] == stoneowner) && (board[i][j + 3] == stoneowner))
-					//¼öÆò row¿¡ 4°³°¡ ¿¬¼ÓÀÌ¶ó¸é
+					//ìˆ˜í‰ rowì— 4ê°œê°€ ì—°ì†ì´ë¼ë©´
 					return true;
 			}
 		}
@@ -112,9 +112,9 @@ bool checkvertical() {
 }
 
 bool checkplusdiagonal() {
-	for (int i = 4; i <= 6; i++) { // ÀÌ·¸°Ô(/) »ı±ä diagonal ÀÌ 4°³°¡ µÇ´Â°Ô ÀÖ´ÂÁö °Ë»çÇÑ´Ù.
+	for (int i = 4; i <= 6; i++) { // ì´ë ‡ê²Œ(/) ìƒê¸´ diagonal ì´ 4ê°œê°€ ë˜ëŠ”ê²Œ ìˆëŠ”ì§€ ê²€ì‚¬í•œë‹¤.
 		for (int row = 0; row < i - 3; row++) {
-			if (board[row][i - row] != 0) { //ÇöÀç ÁöÁ¡¿¡ Âø¼ö°¡ µÇ¾îÀÖ´Ù¸é
+			if (board[row][i - row] != 0) { //í˜„ì¬ ì§€ì ì— ì°©ìˆ˜ê°€ ë˜ì–´ìˆë‹¤ë©´
 				int owner = board[row][i - row];
 				if ((board[row + 1][i - row - 1] == owner) && (board[row + 2][i - row - 2] == owner) && (board[row + 3][i - row - 3] == owner)) {
 					return true;
@@ -135,7 +135,7 @@ bool checkplusdiagonal() {
 	return false;
 }
 
-bool checkminusdiagonal() { // ÀÌ·¸°Ô(\) µÇ´Â 4°³ÀÇ row°¡ ÀÖ´ÂÁö °Ë»çÇÑ´Ù
+bool checkminusdiagonal() { // ì´ë ‡ê²Œ(\) ë˜ëŠ” 4ê°œì˜ rowê°€ ìˆëŠ”ì§€ ê²€ì‚¬í•œë‹¤
 	for (int i = 2; i >= 0; i--) {
 		for (int j = 1; j <= 3 - i; j++) {
 			if (board[i + j - 1][j] != 0) {
@@ -156,18 +156,18 @@ bool checkminusdiagonal() { // ÀÌ·¸°Ô(\) µÇ´Â 4°³ÀÇ row°¡ ÀÖ´ÂÁö °Ë»çÇÑ´Ù
 	}
 	return false;
 }
-bool checkdiagonal() { //´ë°¢¼± 4°³ ÀÖ³ª Ã£¾Æº»´Ù.
+bool checkdiagonal() { //ëŒ€ê°ì„  4ê°œ ìˆë‚˜ ì°¾ì•„ë³¸ë‹¤.
 	if ((checkplusdiagonal() == false) && (checkminusdiagonal == false))
 		return false;
 	else
 		return true;
 }
 
-int whoiswinner(int i, int j) { //Áö±İ Âø¼öÇÑ ³ğÀÌ ÀÌ°å´Ù°í ÇÏ¸é, ±× ³ğÀÌ ´©±ºÁö returnÇÑ´Ù.
+int whoiswinner(int i, int j) { //ì§€ê¸ˆ ì°©ìˆ˜í•œ ë†ˆì´ ì´ê²¼ë‹¤ê³  í•˜ë©´, ê·¸ ë†ˆì´ ëˆ„êµ°ì§€ returní•œë‹¤.
 	return board[i][j];
 }
 
-void printboard() { //board»óÅÂ¸¦ ÇÁ¸°Æ®ÇÑ´Ù.
+void printboard() { //boardìƒíƒœë¥¼ í”„ë¦°íŠ¸í•œë‹¤.
 	for (int i = 5; i >= 0; i--) {
 		for (int j = 1; j < 8; j++) {
 			printf("%d ", board[i][j]);
@@ -177,7 +177,7 @@ void printboard() { //board»óÅÂ¸¦ ÇÁ¸°Æ®ÇÑ´Ù.
 }
 
 
-void check4(int player) { //4°³°¡ µÇ´Â °Ô ÀÖ´ÂÁö °¡·Î,¼¼·Î, ´ë°¢¼± »ìÇÉ´Ù.
+void check4(int player) { //4ê°œê°€ ë˜ëŠ” ê²Œ ìˆëŠ”ì§€ ê°€ë¡œ,ì„¸ë¡œ, ëŒ€ê°ì„  ì‚´í•€ë‹¤.
 	bool wow;
 	if (checkdiagonal() == false && checkhorizontal() == false && checkvertical() == false)
 		wow = false;
@@ -189,13 +189,13 @@ void check4(int player) { //4°³°¡ µÇ´Â °Ô ÀÖ´ÂÁö °¡·Î,¼¼·Î, ´ë°¢¼± »ìÇÉ´Ù.
 	}
 }
 
-//board play ÇÔ¼ö
+//board play í•¨ìˆ˜
 int ROWS = 6;
 
 int COLS = 7;
 /*
-Áö±İºÎÅÍ´Â alpha - beta pruning ÇÔ¼öÀÔ´Ï´Ù.
-¾ËÆÄ¿Í º£Å¸¿Í ¹ë·ù°ªÀÇ ½Î¿òÀ» ÁöÄÑº¼±î¿ä? ^^*
+ì§€ê¸ˆë¶€í„°ëŠ” alpha - beta pruning í•¨ìˆ˜ì…ë‹ˆë‹¤.
+ì•ŒíŒŒì™€ ë² íƒ€ì™€ ë°¸ë¥˜ê°’ì˜ ì‹¸ì›€ì„ ì§€ì¼œë³¼ê¹Œìš”? ^^*
 */
 
 /*
@@ -356,7 +356,7 @@ int evaluationTable[6][7] =
 { 4, 6, 8, 10, 8, 6, 4 },
 { 3, 4, 5, 7, 5, 4, 3 } };
 
-//evaluation tableÀº °¢°¢¿¡ ÇØ´çÇÏ´Â Âø¼öÁ¡À» °¡Áö°í, ±×¸¦ ÀÌ¿ëÇØ ¸¸µé¼ö ÀÖ´Â 4rowÀÇ °³¼ö¸¦ ´ã¾Æ³õÀº evaluation TableÀÌ´Ù.
+//evaluation tableì€ ê°ê°ì— í•´ë‹¹í•˜ëŠ” ì°©ìˆ˜ì ì„ ê°€ì§€ê³ , ê·¸ë¥¼ ì´ìš©í•´ ë§Œë“¤ìˆ˜ ìˆëŠ” 4rowì˜ ê°œìˆ˜ë¥¼ ë‹´ì•„ë†“ì€ evaluation Tableì´ë‹¤.
 
 
 int evaluate1() {
@@ -372,8 +372,8 @@ int evaluate1() {
 	return sum;
 }
 
-//evaluationÇÔ¼ö´Â ¿©·¯°³ÀÇ eval·Î ³ª´©¾îÁ® ÀÖ´Âµ¥, Ã¹¹øÂ°´Â evaluation ÇÔ¼öÀÌ´Ù.
-//ÀÌ ÇÔ¼ö´Â utility´Â ÀüÃ¼ elementµéÀÇ ÇÕÀÌ°í, ±×¿¡ ÇØ´çÇÏ´Â ÀÚ¸®¿¡ ÇöÀç player°¡ ÀÖ´Ù¸é +, ´Ù¸¥ ÇÃ·¹ÀÌ¾î°¡ ÀÖ´Ù¸é -¸¦ ÇØ¼­ ÀüÃ¼ sumÀ» Ãâ·ÂÇÑ´Ù
+//evaluationí•¨ìˆ˜ëŠ” ì—¬ëŸ¬ê°œì˜ evalë¡œ ë‚˜ëˆ„ì–´ì ¸ ìˆëŠ”ë°, ì²«ë²ˆì§¸ëŠ” evaluation í•¨ìˆ˜ì´ë‹¤.
+//ì´ í•¨ìˆ˜ëŠ” utilityëŠ” ì „ì²´ elementë“¤ì˜ í•©ì´ê³ , ê·¸ì— í•´ë‹¹í•˜ëŠ” ìë¦¬ì— í˜„ì¬ playerê°€ ìˆë‹¤ë©´ +, ë‹¤ë¥¸ í”Œë ˆì´ì–´ê°€ ìˆë‹¤ë©´ -ë¥¼ í•´ì„œ ì „ì²´ sumì„ ì¶œë ¥í•œë‹¤
 
 	int nconnectedwhithhole(int currplayer) {
 		int sum = 0;
@@ -397,11 +397,11 @@ int evaluate1() {
 		return weight;
 	}
 
-// 4°³·Î ±¸¼ºµÈ row¸¦ ºÃÀ» ¶§, °¡¿îµ¥¿¡ holeÀÌ ÀÖ´Â »óÅÂ·Î 2°³ 1°³·Î ±¸¼ºµÈ row°¡ ÀÖ´Â ÁÙÀÌ ¸¹À» ¼ö·Ï, ±× ³ëµå¿¡ °¡ÁßÄ¡¸¦ µĞ´Ù.
+// 4ê°œë¡œ êµ¬ì„±ëœ rowë¥¼ ë´¤ì„ ë•Œ, ê°€ìš´ë°ì— holeì´ ìˆëŠ” ìƒíƒœë¡œ 2ê°œ 1ê°œë¡œ êµ¬ì„±ëœ rowê°€ ìˆëŠ” ì¤„ì´ ë§ì„ ìˆ˜ë¡, ê·¸ ë…¸ë“œì— ê°€ì¤‘ì¹˜ë¥¼ ë‘”ë‹¤.
 
 int evaluate() {
 	int weight = 0;
-	weight = nconnectedwhithhole(omega) - nconnectedwhithhole(opp); //³ªÀÇ °³¼ö- »ó´ëÀÇ °³¼ö
+	weight = nconnectedwhithhole(omega) - nconnectedwhithhole(opp); //ë‚˜ì˜ ê°œìˆ˜- ìƒëŒ€ì˜ ê°œìˆ˜
 	weight *= 100;
 	weight += evaluate1();
 	for (int x = 1; x <= 7; x++) {
@@ -411,7 +411,7 @@ int evaluate() {
 	return weight;
 }
 
-//À§¿¡ ¾ğ±ŞµÈ evalÇÔ¼ö µÎ°³¸¦ ´õÇÑ´Ù. ´ë½Å ´ÙÀ½°É »ó´ë°¡ µÎ¸é ¹«Á¶°Ç losing moveÀÏ °æ¿ì¿¡´Â, - °¡ÁßÄ¡¸¦ µÖ¼­ ÇÇÇÑ´Ù.
+//ìœ„ì— ì–¸ê¸‰ëœ evalí•¨ìˆ˜ ë‘ê°œë¥¼ ë”í•œë‹¤. ëŒ€ì‹  ë‹¤ìŒê±¸ ìƒëŒ€ê°€ ë‘ë©´ ë¬´ì¡°ê±´ losing moveì¼ ê²½ìš°ì—ëŠ”, - ê°€ì¤‘ì¹˜ë¥¼ ë‘¬ì„œ í”¼í•œë‹¤.
 
 int negamax(int alpha, int beta, int depth, int* xx, int* yy) {
 	nodeCount++;
@@ -434,7 +434,7 @@ int negamax(int alpha, int beta, int depth, int* xx, int* yy) {
 	if (beta > ceiling) {
 		beta = ceiling;
 		if (alpha >= beta)
-			return beta; //Çò°¥·Á¼­ ¹Ù²ã³õÀ½ beta
+			return beta; //í—·ê°ˆë ¤ì„œ ë°”ê¿”ë†“ìŒ beta
 	}
 
 	for (int x = 1; x <= 7; x++) {
@@ -460,8 +460,8 @@ int negamax(int alpha, int beta, int depth, int* xx, int* yy) {
 	return alpha;
 }
 
-//alphabeta pruning ÇÔ¼öÀÌ´Ù. 
-//³ëµå¸¦ ¸¸µå´Â ´ë½Å, ³×°¡¸ß½º°ªÀ» ÅëÇØ¼­ Àç±ÍÀûÀ¸·Î ±¸ÇöÇß´Ù.
+//alphabeta pruning í•¨ìˆ˜ì´ë‹¤. 
+//ë…¸ë“œë¥¼ ë§Œë“œëŠ” ëŒ€ì‹ , ë„¤ê°€ë©•ìŠ¤ê°’ì„ í†µí•´ì„œ ì¬ê·€ì ìœ¼ë¡œ êµ¬í˜„í–ˆë‹¤.
 
 
 /*int negamax(int alpha, int beta, int depth, int* xx, int* yy) {
@@ -565,21 +565,21 @@ int rule() {
 	}
 	for (int i = 1; i < 8; i++) {
 		count = 0;
-		if (board[height[i]][i + 1] == player && (i + 1)<8) {//¿À¸¥ÂÊ È®ÀÎ
+		if (board[height[i]][i + 1] == player && (i + 1)<8) {//ì˜¤ë¥¸ìª½ í™•ì¸
 			count++;
-			if (board[height[i]][i + 2] == player && (i + 2)<8) {//¿À¸¥ÂÊ+1
+			if (board[height[i]][i + 2] == player && (i + 2)<8) {//ì˜¤ë¥¸ìª½+1
 				count++;
 				if (board[height[i]][i + 3] == player && (i + 3)<8) {
 					return i;
 				}
 			}
 		}
-		else if (board[height[i]][i - 1] == player && (i - 1)>0) {//¿ŞÂÊ È®ÀÎ
+		else if (board[height[i]][i - 1] == player && (i - 1)>0) {//ì™¼ìª½ í™•ì¸
 			if (count == 2) {
 				return i;
 			}
 			count++;
-			if (board[height[i]][i - 2] == player && (i - 2)>0) {//¿ŞÂÊ+1
+			if (board[height[i]][i - 2] == player && (i - 2)>0) {//ì™¼ìª½+1
 				if (count == 2) {
 					return i;
 				}
@@ -649,7 +649,7 @@ int rule() {
 		if (ruleflag[i] == 1) {
 			continue;
 		}
-		//¿À¸¥ÂÊ
+		//ì˜¤ë¥¸ìª½
 		if ((i + 1) < 8 && board[height[i]][i + 1] == player) {
 			if (board[height[i]][i + 2] == player) {
 				weight += 12;
@@ -662,7 +662,7 @@ int rule() {
 		else if ((i + 1) < 8 && board[height[i]][i + 1] == opp) {
 			weight -= 2;
 		}
-		//¿ŞÂÊ
+		//ì™¼ìª½
 		if ((i - 1) > 0 && board[height[i]][i - 1] == player) {
 			if (board[height[i]][i - 2] == player) {
 				weight += 12;
@@ -675,7 +675,7 @@ int rule() {
 		else if ((i - 1) > 0 && board[height[i]][i - 1] == opp) {
 			weight -= 2;
 		}
-		//¾Æ·¡
+		//ì•„ë˜
 		if ((i - 1) > 0 && board[height[i] - 1][i] == player) {
 			if ((i - 2) > 0 && board[height[i] - 2][i] == player) {
 				weight += 12;
@@ -688,7 +688,7 @@ int rule() {
 		else if (board[height[i] - 1][i] == opp) {
 			weight -= 2;
 		}
-		//¿ŞÀ§
+		//ì™¼ìœ„
 		if ((i - 1) > 0 && board[height[i] + 1][i - 1] == player) {
 			if ((i - 2) > 0 && board[height[i] + 2][i - 2] == player) {
 				weight += 12;
@@ -701,7 +701,7 @@ int rule() {
 		else if ((i - 1) > 0 && board[height[i] + 1][i - 1] == opp) {
 			weight -= 2;
 		}
-		//¿Ş¾Æ·¡
+		//ì™¼ì•„ë˜
 		if ((i - 1) > 0 && board[height[i] - 1][i - 1] == player) {
 			if ((i - 2) > 0 && board[height[i] - 2][i - 2] == player) {
 				weight += 12;
@@ -714,7 +714,7 @@ int rule() {
 		else if ((i - 1) > 0 && board[height[i] - 1][i - 1] == opp) {
 			weight -= 2;
 		}
-		//¿À¸¥À§
+		//ì˜¤ë¥¸ìœ„
 		if ((i + 1) < 8 && board[height[i] + 1][i + 1] == player) {
 			if ((i + 2) < 8 && board[height[i] + 2][i + 2] == player) {
 				weight += 12;
@@ -727,7 +727,7 @@ int rule() {
 		else if ((i + 1) < 8 && board[height[i] + 1][i + 1] == opp) {
 			weight -= 2;
 		}
-		//¿À¸¥¾Æ·¡
+		//ì˜¤ë¥¸ì•„ë˜
 		if ((i + 1) < 8 && board[height[i] - 1][i + 1] == player) {
 			if ((i + 2) < 8 && board[height[i] - 2][i + 2] == player) {
 				weight += 12;
@@ -758,11 +758,11 @@ int main() {
 		printf("columnarr %d is %d\n", i, columnarr[i]);
 	}
 
-	//ÈŞ¸®½ºÆ½ÀÇ ÀÏÁ¾. Å½»öÀ» ³¡¿¡¼­ºÎÅÍ°¡ ¾Æ´Ï°í, Áß°£ ÄÃ·³ºÎÅÍ ÇØ¼­ È®·üÀ» Áõ°¡½ÃÅ²´Ù.
+	//íœ´ë¦¬ìŠ¤í‹±ì˜ ì¼ì¢…. íƒìƒ‰ì„ ëì—ì„œë¶€í„°ê°€ ì•„ë‹ˆê³ , ì¤‘ê°„ ì»¬ëŸ¼ë¶€í„° í•´ì„œ í™•ë¥ ì„ ì¦ê°€ì‹œí‚¨ë‹¤.
 
 	int firstinput = 0;
 	cout << "hi, first? second?(1 or 2)\n";
-	cout << "¿À¸Ş°¡¸¦ µµ¿ÍÁÖ¼¼¿ä. -01066118266507 ÇÏ³ª-";
+	cout << "ì˜¤ë©”ê°€ë¥¼ ë„ì™€ì£¼ì„¸ìš”.";
 	cin >> omega;
 	if (omega == 1) {
 		opp = 2;
@@ -794,7 +794,7 @@ int main() {
 			play(oppinput);
 		}
 		else {
-			cout << "¿ÀÅ¸. ´Ù½Ã ÀÔ·ÂÇÏ·Å";
+			cout << "ì˜¤íƒ€. ë‹¤ì‹œ ì…ë ¥í•˜ë ´";
 		}
 	}
 }
